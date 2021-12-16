@@ -1,4 +1,5 @@
 import random
+import matplotlib.pyplot as plt
 
 class Slider:
     """
@@ -15,7 +16,12 @@ class Slider:
         self.env = [0]*env_size
         self.action_space = [-1,1]
         self.observation_space=list(range(7))
-        self.q_table = 0
+        self.alpha = 0.01
+
+        # Initialize Q-table with random values
+        self.q_table = [
+            [random.random() for _ in range(2)] for _ in range(env_size)
+        ]
 
     def get_action(self):
         return random.choice(self.action_space)
@@ -46,8 +52,27 @@ class Slider:
     def __repr__(self):
         return "Easy example for understanding Reinforcement Learning."
 
-def run_exp():
-    exp = Slider()
+def run_exp(num_iteration=100):
+    game = Slider()
+    reward_graph = []
+    episode_graph = []
+
+
+    for episode in range(num_iterations):
+        # Used to count the number of moves in a single iteration
+        game = Slider()
+        state = 0
+        moves = 0
+        episodic_reward = 0
+        while state != 6:
+            new_state, reward = game.step(state, action)
+            temp_diff = reward + max(game.q_table[new_state]) - game.q_table[state]
+            game.q_table[state][action] += game.alpha * temp_diff
+            state = new_state
+            moves += 1
+            episodic_reward += reward
+        episode_graph.append(moves)
+        reward_graph.append(episodic_reward)
     return 0
 
 if __name__ == "__main__":
