@@ -15,6 +15,7 @@ class Slider:
         self.env = [0]*env_size
         self.action_space = [-1,1]
         self.observation_space=list(range(7))
+        self.q_table = 0
 
     def get_action(self):
         return random.choice(self.action_space)
@@ -32,7 +33,7 @@ class Slider:
         return 1
 
     def step(self, state, action):
-        if state in (0,6):
+        if state == 0:
             new_state = state
             reward = -10
         else:
@@ -42,10 +43,12 @@ class Slider:
             reward = 10 if state == 6 else 0
         return new_state, reward
 
-        return new_state, reward
-
     def __repr__(self):
         return "Easy example for understanding Reinforcement Learning."
 
+def run_exp():
+    exp = Slider()
+    return 0
+
 if __name__ == "__main__":
-    game = Slider()
+    run_exp()
