@@ -7,24 +7,36 @@ class Slider:
     """
     This class implements RL environment.
 
-    Our environment setting: [0,0,0,0,0,G], where G represents Goal state.
+    Our environment setting: [S,0,0,0,0,G], where,
+    - G represents Goal state.
+    - S represents Start state.
 
     Paramteres:
     ===========
     env_size: int
         --> size of the environment; default is 7.
+    
+    alpha: float
+        --> Learning Rate; default is 0.01.
+    
+    epsilon: float
+        --> Refer to epsilon-greedy algorithm.
     """
-    def __init__(self, env_size=7):
+    def __init__(self, env_size=7, alpha=0.01, epsilon=0.2):
         self.env_size = env_size
         self.env = [0]*self.env_size
         self.env[0] = 1
         self.action_space = [-1,1]
         self.observation_space=list(range(7))
-        self.alpha = 0.01
-        self.epsilon = 0.2
+        self.alpha = alpha
+        self.epsilon = epsilon
 
         # Initialize Q-table with random values
         self.q_table = np.zeros((self.env_size, 2))
+        # self.q_table = [
+        #     [random.random() for _ in range(2)] for _ in range(7)
+        # ]
+        # self.q_table[6] = [10,10]
      
     def reset(self):
         self.env = [0]*self.env_size
@@ -52,7 +64,13 @@ class Slider:
             new_state = state+action
             self.env[state] = 0
             self.env[new_state] = 1
-            reward = 10 if new_state == 6 else 1
+            if action == 1 and new_state != 6:
+                reward = 1
+            elif action == 1 and new_state == 6:
+                reward = 10
+            else:
+                reward = 0
+            # reward = 10 if new_state == 6 else 0
         return new_state, reward
     
     def show_functions(self):
@@ -75,27 +93,32 @@ def run_exp(num_iterations=100):
     reward_graph = []
     episode_graph = []
 
+    # This will record all the steps during an episode
+    # file = open('episodes.txt','w')
     game.reset()
     for episode in range(num_iterations):
         # Used to count the number of moves in a single iteration
+        # file.write(f'Ep{episode:>3}: 0')
         state = 0
         moves = 0
         episodic_reward = 0
-        while state != 6 and moves < 20:
+        while state != 6:# and moves < 20:
             action = game.get_action(state)
-            #print(f'{state=}, {action=}')
             new_state, reward = game.step(state, action)
-            #print(f'{new_state=}')
             # Temporal Difference
+            action = 0 if action == -1 else 1
             temp_diff = reward + max(game.q_table[new_state]) - game.q_table[state][action]
             # Q_learning
             game.q_table[state][action] += game.alpha * temp_diff
             state = new_state
             moves += 1
             episodic_reward += reward
+            # file.write(f'{"<-" if action==-1 else "->"}{new_state}')
         episode_graph.append(moves)
         reward_graph.append(episodic_reward)
         game.reset()
+        # file.write('\n')
+    # file.close()
     
     game.show_functions()
     plot_graphs(reward_graph, episode_graph)
@@ -117,6 +140,6 @@ def plot_graphs(reward_graph, episode_graph):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        run_exp(100)
+        run_exp(10)
     else:
         run_exp(int(sys.argv[1]))
