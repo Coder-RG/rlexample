@@ -11,6 +11,8 @@ class Slider:
     - G represents Goal state.
     - S represents Start state.
 
+    Gamma has not been implemented in q-learning. Will change in near future.
+
     Paramteres:
     ===========
     env_size: int
@@ -47,9 +49,11 @@ class Slider:
         if p < self.epsilon:
             return random.choice(self.action_space)
         else:
-            if self.q_table[state][0] <= self.q_table[state][1]:
+            if self.q_table[state][0] > self.q_table[state][1]:
                 return -1
-            return 1
+            elif self.q_table[state][1] > self.q_table[state][0]:
+                return 1
+            return random.choice(self.action_space)
 
     def get_reward(self, state):
         if state == 6:
@@ -88,6 +92,25 @@ class Slider:
     def __repr__(self):
         return "Easy example for understanding Reinforcement Learning."
 
+def plot_graphs(reward_graph, episode_graph):
+    # Plot useful information
+    fig, axs = plt.subplots(1,2, figsize=(5,2.7), layout='constrained')
+    axs[0].plot(range(len(reward_graph)), reward_graph, label='reward')
+    axs[0].plot((0,len(reward_graph)-1), (0, 0), color='red', linestyle='dashed',label='y=0')
+    axs[0].set_title("Reward per episode")
+    axs[0].set_xlabel("Episode")
+    axs[0].set_ylabel("Reward")
+    axs[0].legend()
+    axs[1].plot(range(len(episode_graph)), episode_graph, label='ep_length')
+    axs[1].set_title("Episode lengths")
+    axs[1].set_xlabel("Episode")
+    axs[1].set_ylabel("Legth")
+    axs[1].legend()
+    plt.show()
+    fig.savefig('graphs.png',transparent=True,dpi=80)
+    #fig.savefig('graphs.svg',transparent=True,dpi=80)
+    return 0
+
 def run_exp(num_iterations=100):
     game = Slider()
     reward_graph = []
@@ -122,20 +145,6 @@ def run_exp(num_iterations=100):
     
     game.show_functions()
     plot_graphs(reward_graph, episode_graph)
-    return 0
-
-def plot_graphs(reward_graph, episode_graph):
-    # Plot useful information
-    fig, axs = plt.subplots(1,2, figsize=(5,2.7), layout='constrained')
-    axs[0].plot(range(len(reward_graph)), reward_graph, label='reward')
-    axs[0].set_title("Reward per episode")
-    axs[0].set_xlabel("Episode")
-    axs[0].set_ylabel("Reward")
-    axs[1].plot(range(len(episode_graph)), episode_graph, label='ep_length')
-    axs[1].set_title("Episode lengths")
-    axs[1].set_xlabel("Episode")
-    axs[1].set_ylabel("Legth")
-    plt.show()
     return 0
 
 if __name__ == "__main__":
