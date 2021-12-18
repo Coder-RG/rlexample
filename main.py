@@ -55,11 +55,6 @@ class Slider:
                 return 1
             return random.choice(self.action_space)
 
-    def get_reward(self, state):
-        if state == 6:
-            return 10
-        return 1
-
     def step(self, state, action):
         if state == 0 and action == -1:
             new_state = state
