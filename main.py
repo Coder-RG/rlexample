@@ -91,7 +91,7 @@ def plot_graphs(reward_graph, episode_graph):
     # Plot useful information
     fig, axs = plt.subplots(1,2, figsize=(5,2.7), layout='constrained')
     axs[0].plot(range(len(reward_graph)), reward_graph, label='reward')
-    axs[0].plot((0,len(reward_graph)-1), (0, 0), color='red', linestyle='dashed',label='y=0')
+    axs[0].plot((0,len(reward_graph)-1), (15, 15), color='red', linestyle='dashed',label='y=0')
     axs[0].set_title("Reward per episode")
     axs[0].set_xlabel("Episode")
     axs[0].set_ylabel("Reward")
