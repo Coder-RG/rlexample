@@ -89,9 +89,10 @@ class Slider:
 
 def plot_graphs(reward_graph, episode_graph):
     # Plot useful information
-    fig, axs = plt.subplots(1,2, figsize=(5,2.7), layout='constrained')
+    fig, axs = plt.subplots(1,2, figsize=(8,2.7), layout='constrained')
     axs[0].plot(range(len(reward_graph)), reward_graph, label='reward')
-    axs[0].plot((0,len(reward_graph)-1), (15, 15), color='red', linestyle='dashed',label='y=0')
+    axs[0].plot((0,len(reward_graph)-1), (15, 15), color='red',
+                linestyle='dashed',label='y=0')
     axs[0].set_title("Reward per episode")
     axs[0].set_xlabel("Episode")
     axs[0].set_ylabel("Reward")
@@ -101,9 +102,8 @@ def plot_graphs(reward_graph, episode_graph):
     axs[1].set_xlabel("Episode")
     axs[1].set_ylabel("Legth")
     axs[1].legend()
-    plt.show()
     fig.savefig('graphs.png',transparent=True,dpi=80)
-    #fig.savefig('graphs.svg',transparent=True,dpi=80)
+    plt.show()
     return 0
 
 def run_exp(num_iterations=100):
@@ -144,6 +144,6 @@ def run_exp(num_iterations=100):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        run_exp(10)
+        run_exp(50)
     else:
         run_exp(int(sys.argv[1]))
