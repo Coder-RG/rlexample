@@ -24,12 +24,12 @@ To run any of the files:
 ```shell
 python3 SliderReward[1-3].py <no-of-episodes>
 ```
-Here `<no-of-episodes>` is the amount of  iterations for training
-the agent.
+Here `<no-of-episodes>` is the amount of iterations for training
+the agent. If no argument is provided, then the default is 50.
 
 **Example**
 ```shell
-$ python SliderReward1.py
+$ python3 SliderReward1.py
 
 $ python3 SliderReward1.py 100
 ```
