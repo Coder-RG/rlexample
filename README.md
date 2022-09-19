@@ -4,6 +4,7 @@ This is a simple example of reinforcement learning. Hope this encourages you
 to build something interesting yourself.
 
 Change from iter2.
+Change from iter1.
 
 ## Environment
 
